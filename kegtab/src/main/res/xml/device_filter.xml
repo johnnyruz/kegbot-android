@@ -35,5 +35,8 @@
         vendor-id="1003"
         product-id="1078"/>
 
+    <!-- 0x1a86 / 0x7523: Qinheng CH340 -->
+    <usb-device vendor-id="6790" product-id="29987" />
+
 </resources>
 
