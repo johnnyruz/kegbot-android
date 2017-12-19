@@ -198,6 +198,8 @@ public class TapStatusFragment extends Fragment {
 
     final TextView title = ButterKnife.findById(mView, R.id.tapTitle);
     final TextView subtitle = ButterKnife.findById(mView, R.id.tapSubtitle);
+    final TextView abvText = ButterKnife.findById(mView, R.id.tabAbv);
+    final TextView ibuText = ButterKnife.findById(mView, R.id.tabIbu);
     final TextView tapNotes = ButterKnife.findById(mView, R.id.tapNotes);
     final ViewFlipper flipper = ButterKnife.findById(mView, R.id.tapStatusFlipper);
 
@@ -252,6 +254,13 @@ public class TapStatusFragment extends Fragment {
       description = tap.getDescription();
     }
 
+    // Find ABV and IBU values
+    final String abv = String.valueOf(keg.getBeverage().getAbvPercent());
+    abvText.setText("ABV: " + abv + "%");
+
+    final String ibu = String.valueOf(keg.getBeverage().getIbu());
+    ibuText.setText("IBU: " + ibu);
+
     final ImageView tapImage = (ImageView) mView.findViewById(R.id.tapImage);
 
     // Show tap image, or notes if none available.
@@ -263,8 +272,9 @@ public class TapStatusFragment extends Fragment {
       final Image image = keg.getBeverage().getPicture();
       final String imageUrl = image.getUrl();
       mImageDownloader.download(imageUrl, tapImage);
-    } else if (!Strings.isNullOrEmpty(description)) {
-      tapImage.setVisibility(View.GONE);
+    }
+
+    if (!Strings.isNullOrEmpty(description)) {
       tapNotes.setVisibility(View.VISIBLE);
       tapNotes.setText(description);
     }
