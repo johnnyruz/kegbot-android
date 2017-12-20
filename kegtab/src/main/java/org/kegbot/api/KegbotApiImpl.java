@@ -490,16 +490,7 @@ public class KegbotApiImpl implements Backend {
   @Override
   public KegTap startKeg(KegTap tap, String beerName, String brewerName, String styleName,
                          String kegType, Double beerAbv, Double beerIbu) throws KegbotApiException {
-    final Map<String, String> params = ImmutableMap.<String, String>builder()
-            .put("beer_name", beerName)
-            .put("brewer_name", brewerName)
-            .put("style_name", styleName)
-            .put("keg_size", kegType)
-            .put("abv_percent", beerAbv.toString())
-            .put("ibu", beerIbu.toString())
-            .build();
-
-    return postProto("/taps/" + tap.getId() + "/activate/", KegTap.newBuilder(), params);
+    return startKeg(tap, beerName, brewerName, styleName, kegType);
   }
 
   @Override

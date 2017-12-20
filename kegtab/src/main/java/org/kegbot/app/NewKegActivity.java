@@ -39,6 +39,7 @@ import android.widget.TextView;
 
 import com.google.common.base.Strings;
 
+import org.kegbot.api.KegbotApiImpl;
 import org.kegbot.app.config.AppConfiguration;
 import org.kegbot.app.config.SharedPreferencesConfigurationStore;
 import org.kegbot.app.util.KegSizes;
@@ -101,6 +102,11 @@ public class NewKegActivity extends Activity {
     mStyle = (AutoCompleteTextView) findViewById(R.id.newKegStyle);
     mAbv = (AutoCompleteTextView) findViewById(R.id.newKegAbv);
     mIbu = (AutoCompleteTextView) findViewById(R.id.newKegIbu);
+
+    if(KegbotCore.getInstance(NewKegActivity.this).getBackend().getClass() == KegbotApiImpl.class){
+        mAbv.setVisibility(View.GONE);
+        mIbu.setVisibility(View.GONE);
+    }
 
     // Hack: TextView "next" doesn't advance to the Spinner without
     // this hack..
