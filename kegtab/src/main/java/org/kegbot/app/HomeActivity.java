@@ -281,6 +281,7 @@ public class HomeActivity extends CoreActivity {
         .setActionName(getString(R.string.alert_unbound_action_name))
         .setDescription(message)
         .severityWarning()
+        .setDismissOnView(true)
         .build());
   }
 

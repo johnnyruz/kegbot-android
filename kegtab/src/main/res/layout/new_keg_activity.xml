@@ -77,6 +77,28 @@
             android:hint="Style"
             android:imeOptions="actionNext"
             android:inputType="textCapWords"
+            android:nextFocusDown="@+id/newKegAbv"/>
+
+        <AutoCompleteTextView
+            android:id="@+id/newKegAbv"
+            style="@style/jumboText"
+            android:layout_width="512dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/newKegStyle"
+            android:hint="ABV"
+            android:imeOptions="actionNext"
+            android:inputType="numberDecimal"
+            android:nextFocusDown="@+id/newKegIbu"/>
+
+        <AutoCompleteTextView
+            android:id="@+id/newKegIbu"
+            style="@style/jumboText"
+            android:layout_width="512dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/newKegAbv"
+            android:hint="IBU"
+            android:imeOptions="actionNext"
+            android:inputType="number"
             android:nextFocusDown="@+id/newKegSize"/>
 
         <Spinner
@@ -84,7 +106,7 @@
             style="@style/jumboText"
             android:layout_width="512dp"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/newKegStyle"
+            android:layout_below="@+id/newKegIbu"
             android:focusable="true"
             android:focusableInTouchMode="true"/>
     </RelativeLayout>

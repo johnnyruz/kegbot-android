@@ -70,6 +70,8 @@ public class LocalBackendDbHelper extends SQLiteOpenHelper {
   private static final String COLUMN_KEG_BEER_TYPE_NAME = "beer_name";
   private static final String COLUMN_KEG_BEER_BREWER_NAME = "brewer_name";
   private static final String COLUMN_KEG_BEER_STYLE_NAME = "style_name";
+  private static final String COLUMN_KEG_BEER_ABV = "abvPercent";
+  private static final String COLUMN_KEG_BEER_IBU = "ibu";
 
   private static final String TABLE_TAPS = "taps";
   private static final String COLUMN_TAP_TAP_NAME = "tap_name";
@@ -126,6 +128,8 @@ public class LocalBackendDbHelper extends SQLiteOpenHelper {
           + COLUMN_KEG_BEER_TYPE_NAME + " TEXT NOT NULL, "
           + COLUMN_KEG_BEER_BREWER_NAME + " TEXT NOT NULL, "
           + COLUMN_KEG_BEER_STYLE_NAME + " TEXT NOT NULL, "
+          + COLUMN_KEG_BEER_ABV + " REAL NOT NULL, "
+          + COLUMN_KEG_BEER_IBU + " REAL NOT NULL, "
           + COLUMN_KEG_ONLINE + " INTEGER NOT NULL DEFAULT 1, "
           + COLUMN_KEG_KEG_TYPE + " TEXT NOT NULL, "
           + COLUMN_KEG_FULL_VOLUME_ML + " REAL NOT NULL, "
@@ -194,6 +198,16 @@ public class LocalBackendDbHelper extends SQLiteOpenHelper {
         .build();
     meter = createOrUpdateFlowMeter(meter, db);
     Log.d(TAG, "Created meter: " + meter);
+
+    FlowMeter meter2 = FlowMeter.newBuilder()
+            .setId(2)
+            .setName("kegboard")
+            .setPortName("flow1")
+            .setTicksPerMl(2.2f)
+            .setController(controller)
+            .build();
+    meter = createOrUpdateFlowMeter(meter2, db);
+    Log.d(TAG, "Created meter: " + meter2);
 
     KegTap tap = KegTap.newBuilder()
         .setName("Main Tap")
@@ -699,6 +713,9 @@ public class LocalBackendDbHelper extends SQLiteOpenHelper {
     final String brewerName = cursor.getString(cursor.getColumnIndex(COLUMN_KEG_BEER_BREWER_NAME));
     final String beerStyle = cursor.getString(cursor.getColumnIndex(COLUMN_KEG_BEER_STYLE_NAME));
 
+    final Double beerAbv = cursor.getDouble(cursor.getColumnIndex(COLUMN_KEG_BEER_ABV));
+    final Double beerIbu = cursor.getDouble(cursor.getColumnIndex(COLUMN_KEG_BEER_IBU));
+
     final Keg keg = Keg.newBuilder()
         .setId(kegId)
         .setStartTime(formatDatetime(cursor.getString(cursor.getColumnIndex(COLUMN_KEG_START_TIME))))
@@ -715,6 +732,8 @@ public class LocalBackendDbHelper extends SQLiteOpenHelper {
             .setBeverageType("beer")
             .setName(beerName)
             .setStyle(beerStyle)
+            .setAbvPercent(beerAbv)
+            .setIbu(beerIbu)
             .setProducer(BeverageProducer.newBuilder()
                 .setId(0)
                 .setName(brewerName)
@@ -790,6 +809,8 @@ public class LocalBackendDbHelper extends SQLiteOpenHelper {
     values.put(COLUMN_KEG_BEER_TYPE_NAME, keg.getBeverage().getName());
     values.put(COLUMN_KEG_BEER_BREWER_NAME, keg.getBeverage().getProducer().getName());
     values.put(COLUMN_KEG_BEER_STYLE_NAME, keg.getBeverage().getStyle());
+    values.put(COLUMN_KEG_BEER_ABV, keg.getBeverage().getAbvPercent());
+    values.put(COLUMN_KEG_BEER_IBU, keg.getBeverage().getIbu());
     return values;
   }
 

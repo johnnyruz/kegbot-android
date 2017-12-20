@@ -37,6 +37,8 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.google.common.base.Strings;
+
 import org.kegbot.app.config.AppConfiguration;
 import org.kegbot.app.config.SharedPreferencesConfigurationStore;
 import org.kegbot.app.util.KegSizes;
@@ -60,9 +62,13 @@ public class NewKegActivity extends Activity {
   private AutoCompleteTextView mName;
   private AutoCompleteTextView mBrewerName;
   private AutoCompleteTextView mStyle;
+  private AutoCompleteTextView mAbv;
+  private AutoCompleteTextView mIbu;
   private Spinner mSize;
   private ArrayAdapter<KegSizeItem> mSizeAdapter;
   private Button mActivateButton;
+  private Double beerAbv = 0.0;
+  private Double beerIbu = 0.0;
 
   private static class KegSizeItem {
     private String mName;
@@ -93,6 +99,8 @@ public class NewKegActivity extends Activity {
     mName = (AutoCompleteTextView) findViewById(R.id.newKegBeerName);
     mBrewerName = (AutoCompleteTextView) findViewById(R.id.newKegBrewer);
     mStyle = (AutoCompleteTextView) findViewById(R.id.newKegStyle);
+    mAbv = (AutoCompleteTextView) findViewById(R.id.newKegAbv);
+    mIbu = (AutoCompleteTextView) findViewById(R.id.newKegIbu);
 
     // Hack: TextView "next" doesn't advance to the Spinner without
     // this hack..
@@ -178,6 +186,14 @@ public class NewKegActivity extends Activity {
     dialog.setMessage("Please wait ...");
     dialog.show();
 
+    if(!Strings.isNullOrEmpty(mAbv.getText().toString())) {
+        beerAbv = Double.parseDouble(mAbv.getText().toString());
+    }
+
+    if(!Strings.isNullOrEmpty(mIbu.getText().toString())) {
+      beerIbu = Double.parseDouble(mIbu.getText().toString());
+    }
+
     new AsyncTask<Void, Void, String>() {
       @Override
       protected String doInBackground(Void... params) {
@@ -190,7 +206,7 @@ public class NewKegActivity extends Activity {
           final Backend backend = KegbotCore.getInstance(NewKegActivity.this).getBackend();
           backend.startKeg(mTap, mName.getText().toString(),
                   mBrewerName.getText().toString(), mStyle.getText().toString(),
-                  selected.getName());
+                  selected.getName(), beerAbv, beerIbu);
           setLastUsedKegSize(selected.getName());
           return "";
         } catch (BackendException e) {

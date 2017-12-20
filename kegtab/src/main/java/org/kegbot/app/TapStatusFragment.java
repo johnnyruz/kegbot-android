@@ -256,10 +256,20 @@ public class TapStatusFragment extends Fragment {
 
     // Find ABV and IBU values
     final String abv = String.valueOf(keg.getBeverage().getAbvPercent());
-    abvText.setText("ABV: " + abv + "%");
+    if(mCore.getConfiguration().getAbvVisibleWhenZero()){
+      abvText.setText("ABV: " + abv + "%");
+    }
+    else {
+      abvText.setText(keg.getBeverage().getAbvPercent() == 0 ? "" : "ABV: " + abv + "%");
+    }
 
     final String ibu = String.valueOf(keg.getBeverage().getIbu());
-    ibuText.setText("IBU: " + ibu);
+    if(mCore.getConfiguration().getIbuVisibleWhenZero()){
+      ibuText.setText("IBU: " + ibu);
+    }
+    else {
+      ibuText.setText(keg.getBeverage().getIbu() == 0 ? "" : "IBU: " + ibu);
+    }
 
     final ImageView tapImage = (ImageView) mView.findViewById(R.id.tapImage);
 

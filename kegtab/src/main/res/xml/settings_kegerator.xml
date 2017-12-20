@@ -42,13 +42,13 @@
             android:title="Pour Maximum Idle Time">
         </EditTextPreference>
 
-        <CheckBoxPreference
+        <!--<CheckBoxPreference
             android:defaultValue="true"
             android:key="config:NETWORK_CONTROLLER_HOST"
             android:summaryOff="New pours will only start when a user authenticates"
             android:summaryOn="A new pour will start any time meter activity is detected"
             android:title="Automatically Start Pours">
-        </CheckBoxPreference>
+        </CheckBoxPreference>-->
     </PreferenceCategory>
     <PreferenceCategory android:title="Kegboard Settings">
         <EditTextPreference

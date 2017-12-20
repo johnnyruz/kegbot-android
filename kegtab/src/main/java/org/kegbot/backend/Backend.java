@@ -55,6 +55,10 @@ public interface Backend {
   public KegTap startKeg(KegTap tap, String beerName, String brewerName, String styleName,
       String kegType) throws BackendException;
 
+  /** Activates a new keg on the specified tap. */
+  public KegTap startKeg(KegTap tap, String beerName, String brewerName, String styleName,
+                         String kegType, Double beerAbv, Double beerIbu) throws BackendException;
+
   /** Assigns an authentication token to a user. */
   public AuthenticationToken assignToken(String authDevice, String tokenValue, String username)
       throws BackendException;
