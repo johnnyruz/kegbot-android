@@ -53,7 +53,7 @@ public class LocalBackendDbHelper extends SQLiteOpenHelper {
 
   private static final String TAG = LocalBackendDbHelper.class.getSimpleName();
 
-  private static final int DATABASE_VERSION = 3;
+  private static final int DATABASE_VERSION = 4;
 
   @VisibleForTesting
   static final String DATABASE_NAME = "local_backend.db";
@@ -70,6 +70,8 @@ public class LocalBackendDbHelper extends SQLiteOpenHelper {
   private static final String COLUMN_KEG_BEER_TYPE_NAME = "beer_name";
   private static final String COLUMN_KEG_BEER_BREWER_NAME = "brewer_name";
   private static final String COLUMN_KEG_BEER_STYLE_NAME = "style_name";
+  private static final String COLUMN_KEG_BEER_ABV = "abvPercent";
+  private static final String COLUMN_KEG_BEER_IBU = "ibu";
 
   private static final String TABLE_TAPS = "taps";
   private static final String COLUMN_TAP_TAP_NAME = "tap_name";
@@ -175,6 +177,17 @@ public class LocalBackendDbHelper extends SQLiteOpenHelper {
           + COLUMN_FLOW_TOGGLE_CONTROLLER_ID + " INTEGER NOT NULL, "
           + COLUMN_FLOW_TOGGLE_PORT_NAME + " STRING NOT NULL)");
     }
+
+    if (currentVersion < 4) {
+        currentVersion = 4;
+        Log.i(TAG, "Updating to schema version " + currentVersion + " ...");
+
+        Log.d(TAG, "Adding Columns to Table " + TABLE_KEGS);
+        db.execSQL("ALTER TABLE " + TABLE_KEGS + " ADD COLUMN " + COLUMN_KEG_BEER_ABV + " REAL NOT NULL DEFAULT 0");
+        db.execSQL("ALTER TABLE " + TABLE_KEGS + " ADD COLUMN " + COLUMN_KEG_BEER_IBU + " REAL NOT NULL DEFAULT 0");
+
+    }
+
   }
 
   private void setDefaults(SQLiteDatabase db) {
@@ -708,6 +721,8 @@ public class LocalBackendDbHelper extends SQLiteOpenHelper {
     final String beerName = cursor.getString(cursor.getColumnIndex(COLUMN_KEG_BEER_TYPE_NAME));
     final String brewerName = cursor.getString(cursor.getColumnIndex(COLUMN_KEG_BEER_BREWER_NAME));
     final String beerStyle = cursor.getString(cursor.getColumnIndex(COLUMN_KEG_BEER_STYLE_NAME));
+    final Double beerAbv = cursor.getDouble(cursor.getColumnIndex(COLUMN_KEG_BEER_ABV));
+    final Double beerIbu = cursor.getDouble(cursor.getColumnIndex(COLUMN_KEG_BEER_IBU));
 
     final Keg keg = Keg.newBuilder()
         .setId(kegId)
@@ -725,6 +740,8 @@ public class LocalBackendDbHelper extends SQLiteOpenHelper {
             .setBeverageType("beer")
             .setName(beerName)
             .setStyle(beerStyle)
+            .setAbvPercent(beerAbv)
+            .setIbu(beerIbu)
             .setProducer(BeverageProducer.newBuilder()
                 .setId(0)
                 .setName(brewerName)
@@ -800,6 +817,8 @@ public class LocalBackendDbHelper extends SQLiteOpenHelper {
     values.put(COLUMN_KEG_BEER_TYPE_NAME, keg.getBeverage().getName());
     values.put(COLUMN_KEG_BEER_BREWER_NAME, keg.getBeverage().getProducer().getName());
     values.put(COLUMN_KEG_BEER_STYLE_NAME, keg.getBeverage().getStyle());
+    values.put(COLUMN_KEG_BEER_ABV, keg.getBeverage().getAbvPercent());
+    values.put(COLUMN_KEG_BEER_IBU, keg.getBeverage().getIbu());
     return values;
   }
 

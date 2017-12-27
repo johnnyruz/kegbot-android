@@ -488,6 +488,12 @@ public class KegbotApiImpl implements Backend {
   }
 
   @Override
+  public KegTap startKeg(KegTap tap, String beerName, String brewerName, String styleName,
+                         String kegType, Double beerAbv, Double beerIbu) throws KegbotApiException {
+    return startKeg(tap, beerName, brewerName, styleName, kegType);
+  }
+
+  @Override
   public List<SystemEvent> getEvents() throws KegbotApiException {
     return getProto("/events/", SystemEvent.newBuilder());
   }

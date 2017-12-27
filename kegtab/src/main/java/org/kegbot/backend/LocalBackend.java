@@ -110,6 +110,48 @@ public class LocalBackend implements Backend {
   }
 
   @Override
+  public KegTap startKeg(KegTap tap, String beerName, String brewerName, String styleName,
+                          String kegType, Double beerAbv, Double beerIbu) throws BackendException {
+
+      if (tap.hasCurrentKeg()) {
+       endKeg(tap.getCurrentKeg());
+      }
+
+      final double volume = KegSizes.getVolumeMl(kegType);
+      final Keg keg = mDb.createOrUpdateKeg(Keg.newBuilder()
+                .setId(0)
+                .setKegType(kegType)
+                .setFullVolumeMl(volume)
+                .setRemainingVolumeMl(volume)
+                .setServedVolumeMl(0)
+                .setSpilledVolumeMl(0)
+                .setPercentFull(100.0)
+                .setOnline(true)
+                .setBeverage(Beverage.newBuilder()
+                  .setId(0)
+                  .setBeverageType("beer")
+                  .setName(beerName)
+                  .setStyle(styleName)
+                  .setAbvPercent(beerAbv)
+                  .setIbu(beerIbu)
+                  .setProducer(BeverageProducer.newBuilder()
+                     .setId(0)
+                     .setName(brewerName)
+                     .build())
+                .build())
+              .build());
+
+      Log.d(TAG, "Created keg: " + keg);
+
+      final KegTap updatedTap = mDb.createOrUpdateTap(KegTap.newBuilder(tap)
+                 .setCurrentKegId(keg.getId())
+                 .build());
+
+      Log.d(TAG, "Updated tap: " + updatedTap);
+      return updatedTap;
+  }
+
+  @Override
   public AuthenticationToken assignToken(String authDevice, String tokenValue, String username)
       throws BackendException {
     throw new OperationNotSupportedException("Local backend does not support users.");
