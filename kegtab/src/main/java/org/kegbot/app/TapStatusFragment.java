@@ -262,7 +262,7 @@ public class TapStatusFragment extends Fragment {
       abvText.setText(keg.getBeverage().getAbvPercent() == 0 ? "" : "ABV: " + abv + "%");
     }
 
-    final String ibu = String.valueOf(keg.getBeverage().getIbu());
+    final String ibu = String.valueOf(Math.round(keg.getBeverage().getIbu()));
     if(mCore.getConfiguration().getIbuVisibleWhenZero()){
       ibuText.setText("IBU: " + ibu);
     } else{
