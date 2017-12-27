@@ -41,6 +41,20 @@
             android:summaryOn="Temperatures will be shown in Celsius"
             android:title="Show Temperatures in Celsius">
         </CheckBoxPreference>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="config:ABV_DISPLAY_WHEN_ZERO"
+            android:summaryOff="ABV will not be displayed when zero"
+            android:summaryOn="ABV will be displayed even when zero"
+            android:title="Show ABV when zero">
+        </CheckBoxPreference>
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="config:IBU_DISPLAY_WHEN_ZERO"
+            android:summaryOff="IBU will not be displayed when zero"
+            android:summaryOn="IBU will be displayed even when zero"
+            android:title="Show IBU when zero">
+        </CheckBoxPreference>
     </PreferenceCategory>
 
 </PreferenceScreen>
