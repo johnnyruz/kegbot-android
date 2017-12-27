@@ -195,6 +195,16 @@ public class LocalBackendDbHelper extends SQLiteOpenHelper {
     meter = createOrUpdateFlowMeter(meter, db);
     Log.d(TAG, "Created meter: " + meter);
 
+    FlowMeter meter2 = FlowMeter.newBuilder()
+            .setId(2)
+            .setName("kegboard")
+            .setPortName("flow1")
+            .setTicksPerMl(2.2f)
+            .setController(controller)
+            .build();
+    meter2 = createOrUpdateFlowMeter(meter2, db);
+    Log.d(TAG, "Created meter: " + meter2);
+
     KegTap tap = KegTap.newBuilder()
         .setName("Main Tap")
         .setMeter(meter)
