@@ -90,6 +90,13 @@ public class HomeActivity extends CoreActivity {
    */
   private static final long ROTATE_INTERVAL_MILLIS = TimeUnit.SECONDS.toMillis(12);
 
+  /**
+   * Startup Delay to allow for Fragments to load so that we display the first tap on start-up
+   *
+   * @see #mStartupModeRunnable
+   */
+  private static final long STARTUP_DELAY_MILLIS = TimeUnit.SECONDS.toMillis(5);
+
   private static final Function<KegTap, String> TAP_TO_NAME = new Function<KegTap, String>() {
     @Nullable
     @Override
@@ -139,6 +146,19 @@ public class HomeActivity extends CoreActivity {
     }
   };
 
+  /**
+   * Called once on startup to initialize with the first tap displayed.
+   * Delay interval required to ensure fragments have loaded.
+   *
+   *  @see #displayFirstItem()
+   */
+  private final Runnable mStartupModeRunnable = new Runnable() {
+    @Override
+    public void run() {
+      displayFirstItem();
+    }
+  };
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -174,6 +194,7 @@ public class HomeActivity extends CoreActivity {
     mCore.getBus().register(this);
     mCore.getHardwareManager().refreshSoon();
     startAttractMode();
+    mAttractModeHandler.postDelayed(mStartupModeRunnable, STARTUP_DELAY_MILLIS);
 
     if (checkPlayServices()) {
       doGcmRegistration();
@@ -315,6 +336,14 @@ public class HomeActivity extends CoreActivity {
     }
     final int nextItem = (mTapStatusPager.getCurrentItem() + 1) % mTapStatusAdapter.getCount();
     mTapStatusPager.setCurrentItem(nextItem);
+  }
+
+  private void displayFirstItem() {
+    final int count = mTapStatusAdapter.getCount();
+    if (count <= 1) {
+      return;
+    }
+    mTapStatusPager.setCurrentItem(0);
   }
 
   private void startAttractMode() {
