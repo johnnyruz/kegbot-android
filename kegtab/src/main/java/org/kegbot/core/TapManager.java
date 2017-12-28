@@ -245,8 +245,13 @@ public class TapManager extends Manager {
     }
 
     if (changed) {
-      Log.d(TAG, "Setting tap " + tap.getId() + " visible=" + isVisible);
-      mLocalConfig.putStringSet(KEY_HIDDEN_TAP_IDS, hiddenTaps);
+      mLocalConfig.removeKey(KEY_HIDDEN_TAP_IDS);
+
+      if(!hiddenTaps.isEmpty()) {
+        Log.d(TAG, "Setting tap " + tap.getId() + " visible=" + isVisible);
+        mLocalConfig.putStringSet(KEY_HIDDEN_TAP_IDS, hiddenTaps);
+      }
+
       postUpdate();
     }
   }

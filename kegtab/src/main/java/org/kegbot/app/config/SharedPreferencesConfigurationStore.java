@@ -100,6 +100,11 @@ public class SharedPreferencesConfigurationStore implements ConfigurationStore {
     return mSharedPreferences.getBoolean(getKey(key), defaultValue);
   }
 
+  @Override
+  public void removeKey(String key) {
+    mSharedPreferences.edit().remove(key).apply();
+  }
+
   /**
    * Returns the key used within shared preferences.
    *

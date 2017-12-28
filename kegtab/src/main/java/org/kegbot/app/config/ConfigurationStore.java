@@ -47,4 +47,6 @@ public interface ConfigurationStore {
 
   public boolean getBoolean(String key, boolean defaultValue);
 
+  public void removeKey(String key);
+
 }
