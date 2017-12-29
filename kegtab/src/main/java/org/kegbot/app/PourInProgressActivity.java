@@ -450,6 +450,7 @@ public class PourInProgressActivity extends CoreActivity {
   @Override
   protected void onPostResume() {
     super.onPostResume();
+    scrollToMostActiveTap();
     final Flow flow = getCurrentlyFocusedFlow();
     Log.d(TAG, "onPostResume: focusedFlow: " + flow);
     if (flow != null) {
