@@ -280,8 +280,9 @@ public class TapStatusFragment extends Fragment {
       final Image image = keg.getBeverage().getPicture();
       final String imageUrl = image.getUrl();
       mImageDownloader.download(imageUrl, tapImage);
-    } else if (!Strings.isNullOrEmpty(description)) {
-      tapImage.setVisibility(View.GONE);
+    }
+
+    if (!Strings.isNullOrEmpty(description)) {
       tapNotes.setVisibility(View.VISIBLE);
       tapNotes.setText(description);
     }
